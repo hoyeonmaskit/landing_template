@@ -55,3 +55,26 @@ export interface SectionProps {
     description: string;
     imageUrl?: string;
   }
+  
+  // 베타 신청 폼 데이터 타입
+  export interface BetaSignupData {
+    spaceType: string;
+    spaceName: string;
+    ownerName: string;
+    email: string;
+    phone: string;
+    currentSystem: string;
+    monthlyBookings: string;
+    ticketSales: string;
+    painPoints: string;
+    [key: string]: string;
+  }
+  
+  // 구글 시트 응답 타입
+  export interface SheetResponse<T> {
+    success: boolean;
+    data?: T[];
+    rowCount?: number;
+    error?: string;
+    messageId?: string;
+  }

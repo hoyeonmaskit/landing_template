@@ -1,5 +1,6 @@
 // /src/lib/googleSheets.ts
 import { google } from 'googleapis';
+import { BetaSignupData, SheetResponse } from '../types';
 
 // 구글 API 인증 설정
 const auth = new google.auth.GoogleAuth({
@@ -10,11 +11,11 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: 'v4', auth });
 const SPREADSHEET_ID = process.env.BETA_SIGNUP_SPREADSHEET_ID;
 
-export async function getSheetData() {
+export async function getSheetData(): Promise<SheetResponse<BetaSignupData>> {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'BetaSignups!A:K',
+      range: '시트1!A:K',
     });
 
     const rows = response.data.values || [];
@@ -26,7 +27,7 @@ export async function getSheetData() {
     // 첫 번째 행을 헤더로 사용하여 데이터 형식화
     const headers = rows[0];
     const data = rows.slice(1).map(row => {
-      const entry: Record<string, any> = {};
+      const entry: Record<string, string> = {};
       headers.forEach((header, index) => {
         entry[header] = row[index] || '';
       });
@@ -47,7 +48,7 @@ export async function getSheetData() {
   }
 }
 
-export async function appendToSheet(data: Record<string, any>) {
+export async function appendToSheet(data: BetaSignupData) {
   try {
     // 데이터 포맷팅
     const values = [
@@ -68,7 +69,7 @@ export async function appendToSheet(data: Record<string, any>) {
     // 스프레드시트에 데이터 추가
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'BetaSignups!A:K', // 시트와 범위 지정
+      range: '시트1!A:K', // 시트와 범위 지정
       valueInputOption: 'USER_ENTERED',
       requestBody: { values },
     });
