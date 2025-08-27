@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,30 +11,42 @@ const Header: React.FC = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/">
-            <span className="text-2xl font-bold text-blue-600">브랜드명</span>
+          <Link href="/" className="flex items-center">
+            <Image 
+              src="/logo.png" 
+              alt="Qless" 
+              width={160} 
+              height={40}
+              className="h-10 w-auto object-contain"
+            />
           </Link>
         </div>
 
         {/* 데스크탑 네비게이션 */}
         <nav className="hidden md:flex space-x-8">
-          <Link href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">
-            기능
+          <Link href="#problem" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+            Problem
           </Link>
-          <Link href="#product" className="text-gray-600 hover:text-blue-600 transition-colors">
-            제품
+          <Link href="#solution" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+            Solution
           </Link>
-          <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">
-            후기
+          <Link href="#feedback" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+            Feedback
           </Link>
-          <Link href="#faq" className="text-gray-600 hover:text-blue-600 transition-colors">
+          <Link href="#partners" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+            Partners
+          </Link>
+          <Link href="#apply" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+            Apply
+          </Link>
+          <Link href="#faq" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
             FAQ
           </Link>
         </nav>
 
         {/* CTA 버튼 */}
         <div className="hidden md:block">
-          <Link href="#contact" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+          <Link href="#contact" className="bg-[#CE2C4F] text-white px-6 py-2 rounded-md hover:bg-[#A02340] transition-colors">
             시작하기
           </Link>
         </div>
@@ -53,19 +66,25 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-md py-4">
           <div className="container mx-auto px-4 flex flex-col space-y-4">
-            <Link href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">
-              기능
+            <Link href="#problem" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+              Problem
             </Link>
-            <Link href="#product" className="text-gray-600 hover:text-blue-600 transition-colors">
-              제품
+            <Link href="#solution" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+              Solution
             </Link>
-            <Link href="#testimonials" className="text-gray-600 hover:text-blue-600 transition-colors">
-              후기
+            <Link href="#feedback" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+              Feedback
             </Link>
-            <Link href="#faq" className="text-gray-600 hover:text-blue-600 transition-colors">
+            <Link href="#partners" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+              Partners
+            </Link>
+            <Link href="#apply" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
+              Apply
+            </Link>
+            <Link href="#faq" className="text-gray-600 hover:text-[#CE2C4F] transition-colors">
               FAQ
             </Link>
-            <Link href="#contact" className="bg-blue-600 text-white px-4 py-2 rounded-md text-center hover:bg-blue-700 transition-colors">
+            <Link href="#contact" className="bg-[#CE2C4F] text-white px-4 py-2 rounded-md text-center hover:bg-[#A02340] transition-colors">
               시작하기
             </Link>
           </div>

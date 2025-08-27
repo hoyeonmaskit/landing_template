@@ -1,13 +1,12 @@
 import React from 'react';
 import Header from '@/components/sections/Header';
 import HeroSection from '@/components/sections/HeroSection';
-import FeaturesSection from '@/components/sections/FeaturesSection';
-import ProductSection from '@/components/sections/ProductSection';
-import StatsSection from '@/components/sections/StatsSection';
-import TestimonialsSection from '@/components/sections/TestimonialsSection';
+import IssuesSection from '@/components/sections/IssuesSection';
+import SolutionSection1 from '@/components/sections/SolutionSection1';
+import FeedbackSection from '@/components/sections/FeedbackSection';
+// import PartnersSection from '@/components/sections/PartnersSection';
+import ApplySection from '@/components/sections/ApplySection';
 import FaqSection from '@/components/sections/FaqSection';
-import CtaSection from '@/components/sections/CtaSection';
-import BetaSignupSection from '@/components/sections/BetaSignupSection';
 import Footer from '@/components/sections/Footer';
 
 export default function Home() {
@@ -15,13 +14,12 @@ export default function Home() {
     <main className="min-h-screen">
       <Header />
       <HeroSection />
-      <FeaturesSection />
-      <ProductSection />
-      <StatsSection />
-      <TestimonialsSection />
+      <IssuesSection />
+      <SolutionSection1 />
+      <FeedbackSection />
+      {/* <PartnersSection /> */}
+      <ApplySection />
       <FaqSection />
-      <CtaSection />
-      <BetaSignupSection />
       <Footer />
     </main>
   );

@@ -70,6 +70,17 @@ export interface SectionProps {
     [key: string]: string;
   }
   
+  // 일반 문의 폼 데이터 타입
+  export interface ContactFormData {
+    timestamp: string;
+    companyName: string;
+    email: string;
+    contactPerson: string;
+    phone: string;
+    inquiry: string;
+    [key: string]: string;
+  }
+  
   // 구글 시트 응답 타입
   export interface SheetResponse<T> {
     success: boolean;

@@ -1,6 +1,6 @@
 // /src/lib/googleSheets.ts
 import { google } from 'googleapis';
-import { BetaSignupData, SheetResponse } from '../types';
+import { BetaSignupData, ContactFormData, SheetResponse } from '../types';
 
 // 구글 API 인증 설정
 const auth = new google.auth.GoogleAuth({
@@ -11,7 +11,7 @@ const auth = new google.auth.GoogleAuth({
 const sheets = google.sheets({ version: 'v4', auth });
 const SPREADSHEET_ID = process.env.BETA_SIGNUP_SPREADSHEET_ID;
 
-export async function getSheetData(): Promise<SheetResponse<BetaSignupData>> {
+export async function getSheetData(): Promise<SheetResponse<Record<string, string>>> {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
@@ -83,6 +83,41 @@ export async function appendToSheet(data: BetaSignupData) {
     return {
       success: false,
       error: 'Failed to record signup data',
+    };
+  }
+}
+
+export async function appendContactToSheet(data: ContactFormData) {
+  try {
+    // 문의 데이터 포맷팅
+    const values = [
+      [
+        data.timestamp,
+        data.companyName,
+        data.email,
+        data.contactPerson,
+        data.phone,
+        data.inquiry
+      ]
+    ];
+
+    // 스프레드시트에 데이터 추가 (다른 시트 또는 범위 사용)
+    const response = await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: '문의!A:F', // 문의용 시트
+      valueInputOption: 'USER_ENTERED',
+      requestBody: { values },
+    });
+
+    return {
+      success: true,
+      messageId: response.data.updates?.updatedRange,
+    };
+  } catch (error) {
+    console.error('Error appending contact to sheet:', error);
+    return {
+      success: false,
+      error: 'Failed to record contact data',
     };
   }
 }

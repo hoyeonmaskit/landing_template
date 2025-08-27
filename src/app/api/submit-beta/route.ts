@@ -31,8 +31,22 @@ export async function POST(request: NextRequest) {
     // 이메일 알림 전송
     const emailResult = await sendBetaSignupNotification(data);
     if (!emailResult.success) {
-      console.warn('Email notification failed, but data was recorded:', emailResult.error);
-      // 이메일 실패해도 스프레드시트에 저장되었으면 성공으로 처리할 수 있음
+      console.warn('❌ 이메일 알림 전송 실패, 하지만 데이터는 저장됨:', emailResult.error);
+      console.log('=== 📧 베타 파트너 신청 정보 (이메일 대신 콘솔 출력) ===');
+      console.log('🎯 수신 예정: info@maskit.co.kr');
+      console.log('👤 신청자:', data.ownerName);
+      console.log('🏢 공간명:', data.spaceName);
+      console.log('📧 이메일:', data.email);
+      console.log('📱 연락처:', data.phone);
+      console.log('📝 공간 유형:', data.spaceType);
+      console.log('🔧 현재 관리 방식:', data.currentSystem);
+      console.log('📊 월 평균 예약:', data.monthlyBookings);
+      console.log('🎫 티켓 판매:', data.ticketSales);
+      console.log('❗ 주요 문제점:', data.painPoints);
+      console.log('⏰ 신청 시간:', new Date().toLocaleString('ko-KR'));
+      console.log('=================================================');
+    } else {
+      console.log('✅ 이메일 알림 전송 성공!');
     }
     
     return NextResponse.json({ 

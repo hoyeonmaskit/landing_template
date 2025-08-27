@@ -13,11 +13,16 @@ const emailLogs: Array<{
 
 // Gmail SMTP 트랜스포터 생성
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // TLS 사용
   auth: {
     user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD, // Gmail 비밀번호(앱 비밀번호)
+    pass: process.env.GMAIL_PASSWORD,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
 // 이메일 로그 가져오기
@@ -30,25 +35,25 @@ export async function getEmailLogs() {
 
 export async function sendBetaSignupNotification(data: Record<string, any>) {
   try {
-    // 관리자에게 알림 이메일
+    // 관리자에게 알림 이메일 (info@maskit.co.kr)
     const adminMailOptions = {
       from: `"Qless Space" <${process.env.GMAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL,
+      to: 'info@maskit.co.kr',
       subject: `[Qless Space] 새로운 베타 파트너 신청 - ${data.spaceName}`,
       text: `
-        새로운 베타 파트너 신청이 접수되었습니다.
-        
-        공간 유형: ${data.spaceType}
-        공간명: ${data.spaceName}
-        대표자명: ${data.ownerName}
-        이메일: ${data.email}
-        연락처: ${data.phone}
-        현재 관리 방식: ${data.currentSystem}
-        월 평균 예약 건수: ${data.monthlyBookings}
-        티켓 판매 여부: ${data.ticketSales}
-        주요 문제점: ${data.painPoints}
-        
-        신청 시간: ${new Date().toLocaleString('ko-KR')}
+새로운 베타 파트너 신청이 접수되었습니다.
+
+공간 유형: ${data.spaceType}
+공간명: ${data.spaceName}
+대표자명: ${data.ownerName}
+이메일: ${data.email}
+연락처: ${data.phone}
+현재 관리 방식: ${data.currentSystem}
+월 평균 예약 건수: ${data.monthlyBookings}
+티켓 판매 여부: ${data.ticketSales}
+주요 문제점: ${data.painPoints}
+
+신청 시간: ${new Date().toLocaleString('ko-KR')}
       `,
       html: `
         <h2>새로운 베타 파트너 신청이 접수되었습니다</h2>
@@ -94,34 +99,25 @@ export async function sendBetaSignupNotification(data: Record<string, any>) {
       `
     };
 
-    // 로그에 관리자 이메일 추가
-    emailLogs.push({
-      timestamp: new Date().toISOString(),
-      recipient: process.env.ADMIN_EMAIL || '',
-      subject: `[Qless Space] 새로운 베타 파트너 신청 - ${data.spaceName}`,
-      status: '전송 시도',
-      data: data
-    });
-
     // 신청자에게 확인 이메일
     const userMailOptions = {
       from: `"Qless Space" <${process.env.GMAIL_USER}>`,
       to: data.email,
       subject: '[Qless Space] 베타 파트너 신청이 접수되었습니다',
       text: `
-        안녕하세요, ${data.ownerName}님!
-        
-        Qless Space 베타 파트너 신청이 성공적으로 접수되었습니다.
-        곧 담당자가 연락드릴 예정입니다.
-        
-        신청 정보:
-        공간명: ${data.spaceName}
-        공간 유형: ${data.spaceType}
-        
-        문의사항이 있으시면 언제든지 이 이메일로 회신해주세요.
-        
-        감사합니다.
-        Qless Space 팀 드림
+안녕하세요, ${data.ownerName}님!
+
+Qless Space 베타 파트너 신청이 성공적으로 접수되었습니다.
+곧 담당자가 연락드릴 예정입니다.
+
+신청 정보:
+공간명: ${data.spaceName}
+공간 유형: ${data.spaceType}
+
+문의사항이 있으시면 언제든지 이 이메일로 회신해주세요.
+
+감사합니다.
+Qless Space 팀 드림
       `,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -143,13 +139,26 @@ export async function sendBetaSignupNotification(data: Record<string, any>) {
       `
     };
 
-    // 이메일 발송
-    const [adminRes, userRes] = await Promise.all([
-      transporter.sendMail(adminMailOptions),
-      transporter.sendMail(userMailOptions)
-    ]);
-    
-    // 로그에 사용자 이메일 추가
+    console.log('📧 이메일 발송 시도...');
+    console.log('관리자 이메일:', 'info@maskit.co.kr');
+    console.log('신청자 이메일:', data.email);
+
+    // 이메일 발송 시도
+    const adminResult = await transporter.sendMail(adminMailOptions);
+    console.log('✅ 관리자 이메일 발송 성공:', adminResult.messageId);
+
+    const userResult = await transporter.sendMail(userMailOptions);
+    console.log('✅ 신청자 이메일 발송 성공:', userResult.messageId);
+
+    // 로그 추가
+    emailLogs.push({
+      timestamp: new Date().toISOString(),
+      recipient: 'info@maskit.co.kr',
+      subject: `[Qless Space] 새로운 베타 파트너 신청 - ${data.spaceName}`,
+      status: '전송 성공',
+      data: data
+    });
+
     emailLogs.push({
       timestamp: new Date().toISOString(),
       recipient: data.email,
@@ -164,11 +173,23 @@ export async function sendBetaSignupNotification(data: Record<string, any>) {
 
     return { 
       success: true,
-      adminMessageId: adminRes.messageId,
-      userMessageId: userRes.messageId
+      adminMessageId: adminResult.messageId,
+      userMessageId: userResult.messageId
     };
   } catch (error) {
-    console.error('Error sending email notification:', error);
-    return { success: false, error: 'Failed to send email notification' };
+    console.error('❌ 이메일 발송 실패:', error);
+    
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    
+    // 실패 로그 추가
+    emailLogs.push({
+      timestamp: new Date().toISOString(),
+      recipient: 'info@maskit.co.kr',
+      subject: `[Qless Space] 새로운 베타 파트너 신청 - ${data.spaceName}`,
+      status: '전송 실패: ' + errorMessage,
+      data: data
+    });
+
+    return { success: false, error: 'Failed to send email notification: ' + errorMessage };
   }
 }

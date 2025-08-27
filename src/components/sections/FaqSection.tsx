@@ -40,11 +40,15 @@ const FaqSection: React.FC = () => {
   const faqs = [
     {
       question: "서비스 가입은 어떻게 하나요?",
-      answer: "홈페이지 상단의 '시작하기' 버튼을 클릭하여 가입 양식을 작성하시면 됩니다. 이메일 인증 후 바로 서비스 이용이 가능합니다."
+      answer: "FAQ 상단의 문의하기 항목을 작성하시어 '제출하기' 버튼을 눌러주시면 됩니다. 서비스 비용 협의 및 계약 완료 후 계정을 만들어드립니다."
     },
     {
-      question: "요금제는 언제든지 변경할 수 있나요?",
-      answer: "네, 언제든지 요금제를 업그레이드하거나 다운그레이드할 수 있습니다. 변경사항은 다음 결제 주기부터 적용됩니다."
+      question: "서비스 상품이 어떻게 구분되나요?",
+      answer: "큐리스는 티켓 서비스를 [예매 - 티켓 발권 - 검표]로 구분합니다. \n고객사 상황에 맞추어 예매부터 서비스를 제공할 수도 있고, 다른 예매처를 사용하시는 경우 티켓 발권부터 서비스를 제공하기도 합니다."
+    },
+    {
+      question: "초대권도 서비스 가능한가요?",
+      answer: "네, 확정된 명단에 대한 티켓 발송 서비스도 가능합니다."
     },
     {
       question: "데이터는 어떻게 보호되나요?",
@@ -52,12 +56,12 @@ const FaqSection: React.FC = () => {
     },
     {
       question: "기술 지원은 어떻게 받을 수 있나요?",
-      answer: "이메일, 실시간 채팅, 전화 등 다양한 채널을 통해 24/7 기술 지원을 제공하고 있습니다. 프로 플랜 이상의 사용자는 우선 지원을 받을 수 있습니다."
+      answer: "이메일, 실시간 채팅, 전화 등 다양한 채널을 통해 24/7 기술 지원을 제공하고 있습니다."
     }
   ];
 
   return (
-    <section id="faq" className="py-16">
+    <section id="faq" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">자주 묻는 질문</h2>
